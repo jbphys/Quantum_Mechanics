@@ -126,7 +126,7 @@
         requestAnimationFrame(drawScreen);
       }
     }
-    if (elapsed >= 14) cycleStart = now;
+    if (elapsed >= 27) cycleStart = now;
     requestAnimationFrame(switchView);
   }
 
