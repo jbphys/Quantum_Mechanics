@@ -19,10 +19,6 @@
   electronCanvas.style.borderRadius = '10px';
   waveCanvas.insertAdjacentElement('afterend', electronCanvas);
 
-  const caption = figure.querySelector('figcaption');
-  const waveCaption = 'Free-particle wavepacket: |ψ(x,t)|² spreads as time evolves';
-  const electronCaption = 'Single-electron impacts gradually reveal a double-slit interference pattern';
-
   const ctx = electronCanvas.getContext('2d');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const impacts = [];
@@ -30,7 +26,7 @@
   let cycleStart = performance.now();
   let showingElectrons = false;
 
-  const waveDuration = 7;
+  const waveDuration = 120;
   const buildDuration = 600;
   const holdDuration = 45;
   const cycleDuration = waveDuration + buildDuration + holdDuration;
@@ -150,7 +146,6 @@
       waveCanvas.style.display = 'none';
       electronCanvas.style.display = 'block';
       showingElectrons = true;
-      if (caption) caption.textContent = electronCaption;
       drawScreen(now);
       return;
     }
@@ -161,7 +156,6 @@
       showingElectrons = electronPhase;
       waveCanvas.style.display = electronPhase ? 'none' : 'block';
       electronCanvas.style.display = electronPhase ? 'block' : 'none';
-      if (caption) caption.textContent = electronPhase ? electronCaption : waveCaption;
       if (electronPhase) {
         impacts.length = 0;
         lastImpact = 0;
