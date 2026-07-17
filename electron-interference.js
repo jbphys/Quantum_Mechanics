@@ -30,6 +30,12 @@
   let cycleStart = performance.now();
   let showingElectrons = false;
 
+  const waveDuration = 7;
+  const buildDuration = 30;
+  const holdDuration = 12;
+  const cycleDuration = waveDuration + buildDuration + holdDuration;
+  const maxImpacts = 3200;
+
   function resize(canvas, context) {
     const dpr = Math.max(1, window.devicePixelRatio || 1);
     const rect = canvas.getBoundingClientRect();
@@ -54,19 +60,19 @@
     const screenLeft = width * 0.08;
     const screenRight = width * 0.92;
     let x;
-    for (let tries = 0; tries < 100; tries++) {
+    for (let tries = 0; tries < 160; tries++) {
       const candidate = screenLeft + Math.random() * (screenRight - screenLeft);
       const q = (candidate - width / 2) / width;
-      const envelope = Math.exp(-24 * q * q);
-      const fringes = 0.18 + 0.82 * Math.pow(Math.cos(13.5 * Math.PI * q), 2);
+      const envelope = Math.exp(-16 * q * q);
+      const fringes = 0.015 + 0.985 * Math.pow(Math.cos(11.5 * Math.PI * q), 2);
       if (Math.random() < envelope * fringes) {
         x = candidate;
         break;
       }
     }
-    if (x === undefined) x = width / 2 + randomGaussian() * width * 0.16;
-    const y = height * 0.12 + Math.random() * height * 0.76;
-    return { x, y, a: 0.55 + Math.random() * 0.45, r: 0.9 + Math.random() * 1.2 };
+    if (x === undefined) x = width / 2 + randomGaussian() * width * 0.15;
+    const y = height * 0.11 + Math.random() * height * 0.78;
+    return { x, y, a: 0.62 + Math.random() * 0.38, r: 0.8 + Math.random() * 1.0 };
   }
 
   function drawScreen(now) {
@@ -81,21 +87,23 @@
     ctx.lineWidth = 1;
     ctx.strokeRect(width * 0.055, height * 0.065, width * 0.89, height * 0.87);
 
-    const interval = reduceMotion ? 0 : 34;
-    if (reduceMotion && impacts.length < 650) {
-      while (impacts.length < 650) impacts.push(sampleImpact(width, height));
-    } else if (now - lastImpact > interval && impacts.length < 900) {
-      impacts.push(sampleImpact(width, height));
-      impacts.push(sampleImpact(width, height));
+    const elapsed = (now - cycleStart) / 1000;
+    const building = reduceMotion || elapsed < waveDuration + buildDuration;
+    const interval = reduceMotion ? 0 : 24;
+
+    if (reduceMotion && impacts.length < maxImpacts) {
+      while (impacts.length < maxImpacts) impacts.push(sampleImpact(width, height));
+    } else if (building && now - lastImpact > interval && impacts.length < maxImpacts) {
+      for (let i = 0; i < 3; i++) impacts.push(sampleImpact(width, height));
       lastImpact = now;
     }
 
     for (const p of impacts) {
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(142,220,255,${p.a})`;
-      ctx.shadowColor = 'rgba(120,210,255,.75)';
-      ctx.shadowBlur = 4;
+      ctx.fillStyle = `rgba(150,228,255,${p.a})`;
+      ctx.shadowColor = 'rgba(120,220,255,.9)';
+      ctx.shadowBlur = 4.5;
       ctx.fill();
     }
     ctx.shadowBlur = 0;
@@ -114,7 +122,7 @@
     }
 
     const elapsed = (now - cycleStart) / 1000;
-    const electronPhase = elapsed >= 7;
+    const electronPhase = elapsed >= waveDuration;
     if (electronPhase !== showingElectrons) {
       showingElectrons = electronPhase;
       waveCanvas.style.display = electronPhase ? 'none' : 'block';
@@ -126,7 +134,7 @@
         requestAnimationFrame(drawScreen);
       }
     }
-    if (elapsed >= 27) cycleStart = now;
+    if (elapsed >= cycleDuration) cycleStart = now;
     requestAnimationFrame(switchView);
   }
 
