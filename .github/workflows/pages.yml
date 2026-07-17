@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Add animation script to deployed page
+        run: sed -i 's#</body>#  <script src="electron-interference.js"></script>\n</body>#' index.html
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
