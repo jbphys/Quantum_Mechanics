@@ -52,10 +52,10 @@
         radial-gradient(circle at 82% 20%, rgba(47,111,186,.55), transparent 31%),
         radial-gradient(circle at 14% 82%, rgba(213,166,58,.20), transparent 25%),
         linear-gradient(135deg, #0d1c31, #18395f);
-      padding: 110px 0 92px;
+      padding: 90px 0 76px;
       overflow: hidden;
     }
-    .hero { display: grid; grid-template-columns: 1.4fr .8fr; gap: 48px; align-items: center; }
+    .hero { display: grid; grid-template-columns: 1.15fr .95fr; gap: 42px; align-items: center; }
     .eyebrow { color: #ffd977; font-weight: 700; text-transform: uppercase; letter-spacing: .14em; font-size: .8rem; }
     h1 { font-family: Georgia, serif; font-size: clamp(3rem, 7vw, 5.8rem); line-height: 1; margin: 16px 0 22px; }
     .lead { font-size: 1.2rem; max-width: 690px; color: rgba(255,255,255,.84); }
@@ -70,16 +70,15 @@
       color: #152238;
     }
     .button.secondary { background: transparent; color: white; border: 1px solid rgba(255,255,255,.5); }
-    .symbol-card {
-      padding: 34px;
+    .wave-card {
+      padding: 20px 20px 15px;
       border: 1px solid rgba(255,255,255,.2);
       background: rgba(255,255,255,.08);
       border-radius: 18px;
       backdrop-filter: blur(8px);
-      text-align: center;
     }
-    .psi { font-family: Georgia, serif; font-size: 5rem; margin: 0; }
-    .equation { font-family: Georgia, serif; font-size: 1.25rem; }
+    .wave-card canvas { width: 100%; height: 250px; display: block; border-radius: 10px; }
+    .wave-caption { margin: 10px 4px 0; text-align: center; color: rgba(255,255,255,.8); font-size: .92rem; }
     section { padding: 78px 0; }
     .section-title { font-family: Georgia, serif; font-size: 2.3rem; margin: 0 0 14px; }
     .section-intro { max-width: 750px; color: var(--muted); margin-bottom: 34px; }
@@ -106,10 +105,13 @@
     footer .container { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
     @media (max-width: 800px) {
       .hero, .grid { grid-template-columns: 1fr; }
-      .symbol-card { display: none; }
       .nav-inner { align-items: flex-start; padding: 16px 0; flex-direction: column; }
       .topics { columns: 1; }
-      header { padding: 72px 0; }
+      header { padding: 68px 0; }
+      .wave-card canvas { height: 210px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
     }
   </style>
 </head>
@@ -137,11 +139,10 @@
           <a class="button secondary" href="#problems">Problem sets</a>
         </div>
       </div>
-      <div class="symbol-card" aria-hidden="true">
-        <p class="psi">ψ</p>
-        <p class="equation">iℏ ∂ψ/∂t = Ĥψ</p>
-        <p>States · Operators · Measurement</p>
-      </div>
+      <figure class="wave-card" aria-label="Animated spreading of a free-particle Gaussian wavepacket">
+        <canvas id="wavepacket" width="520" height="280"></canvas>
+        <figcaption class="wave-caption">Free-particle wavepacket: |ψ(x,t)|² spreads as time evolves</figcaption>
+      </figure>
     </div>
   </header>
 
@@ -151,7 +152,7 @@
         <h2 class="section-title">Course overview</h2>
         <p class="section-intro">This course introduces the conceptual foundations and mathematical language of quantum theory, with emphasis on physical understanding and systematic problem solving.</p>
         <div class="grid">
-          <article class="card"><h3>Instructor</h3><p>Prof. Jyotirmoy Bhattacharya<br>[Department / Institution]</p></article>
+          <article class="card"><h3>Instructor</h3><p>Jyotirmoy Bhattacharya<br>[Department / Institution]</p></article>
           <article class="card"><h3>Class schedule</h3><p>[Days and times]<br>[Lecture room]</p></article>
           <article class="card"><h3>Office hours</h3><p>[Day and time]<br>[Office / online link]</p></article>
         </div>
@@ -216,8 +217,82 @@
   <footer>
     <div class="container">
       <span>Quantum Mechanics · Course Website</span>
-      <span>Prof. Jyotirmoy Bhattacharya</span>
+      <span>Jyotirmoy Bhattacharya</span>
     </div>
   </footer>
+
+  <script>
+    (() => {
+      const canvas = document.getElementById('wavepacket');
+      const ctx = canvas.getContext('2d');
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let start = performance.now();
+
+      function draw(now) {
+        const dpr = Math.max(1, window.devicePixelRatio || 1);
+        const rect = canvas.getBoundingClientRect();
+        const width = Math.max(320, Math.round(rect.width));
+        const height = Math.max(190, Math.round(rect.height));
+        if (canvas.width !== width * dpr || canvas.height !== height * dpr) {
+          canvas.width = width * dpr;
+          canvas.height = height * dpr;
+        }
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, width, height);
+
+        const elapsed = reduceMotion ? 2.2 : ((now - start) / 1000) % 7;
+        const phase = reduceMotion ? 0.48 : elapsed / 7;
+        const t = phase < 0.82 ? phase / 0.82 : (1 - phase) / 0.18;
+        const smooth = t * t * (3 - 2 * t);
+        const sigma = 22 + 75 * smooth;
+        const centre = width * (0.32 + 0.28 * smooth);
+        const baseY = height * 0.79;
+        const amplitude = Math.min(145, height * 0.62) * (22 / sigma) ** 0.55;
+
+        ctx.strokeStyle = 'rgba(255,255,255,.32)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(28, baseY);
+        ctx.lineTo(width - 20, baseY);
+        ctx.stroke();
+
+        for (let x = 30; x < width - 20; x += 55) {
+          ctx.beginPath();
+          ctx.moveTo(x, baseY - 4);
+          ctx.lineTo(x, baseY + 4);
+          ctx.stroke();
+        }
+
+        const gradient = ctx.createLinearGradient(0, 0, width, 0);
+        gradient.addColorStop(0, 'rgba(255,217,119,.95)');
+        gradient.addColorStop(1, 'rgba(113,190,255,.95)');
+        ctx.strokeStyle = gradient;
+        ctx.fillStyle = 'rgba(87,159,235,.17)';
+        ctx.lineWidth = 3;
+
+        ctx.beginPath();
+        ctx.moveTo(22, baseY);
+        for (let x = 22; x <= width - 18; x += 2) {
+          const density = Math.exp(-((x - centre) ** 2) / (2 * sigma ** 2));
+          const y = baseY - amplitude * density;
+          ctx.lineTo(x, y);
+        }
+        ctx.lineTo(width - 18, baseY);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = 'rgba(255,255,255,.82)';
+        ctx.font = '13px Arial, sans-serif';
+        ctx.fillText('x', width - 18, baseY + 20);
+        ctx.fillText('localized', 24, 24);
+        ctx.fillText('spread', width - 64, 24);
+
+        if (!reduceMotion) requestAnimationFrame(draw);
+      }
+
+      requestAnimationFrame(draw);
+    })();
+  </script>
 </body>
 </html>
