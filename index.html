@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Quantum Mechanics course website">
+  <title>Quantum Mechanics</title>
+  <style>
+    :root {
+      --navy: #13253f;
+      --blue: #2f6fba;
+      --gold: #d5a63a;
+      --paper: #f6f7f9;
+      --ink: #172033;
+      --muted: #5d6878;
+      --white: #ffffff;
+      --line: #dfe4ea;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      line-height: 1.65;
+    }
+    a { color: inherit; }
+    .container { width: min(1100px, 92%); margin: auto; }
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(19, 37, 63, .96);
+      color: white;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+    }
+    .nav-inner {
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand { font-weight: 700; letter-spacing: .04em; }
+    .nav-links { display: flex; flex-wrap: wrap; gap: 22px; }
+    .nav-links a { text-decoration: none; font-size: .95rem; opacity: .9; }
+    .nav-links a:hover { opacity: 1; }
+    header {
+      color: white;
+      background:
+        radial-gradient(circle at 82% 20%, rgba(47,111,186,.55), transparent 31%),
+        radial-gradient(circle at 14% 82%, rgba(213,166,58,.20), transparent 25%),
+        linear-gradient(135deg, #0d1c31, #18395f);
+      padding: 110px 0 92px;
+      overflow: hidden;
+    }
+    .hero { display: grid; grid-template-columns: 1.4fr .8fr; gap: 48px; align-items: center; }
+    .eyebrow { color: #ffd977; font-weight: 700; text-transform: uppercase; letter-spacing: .14em; font-size: .8rem; }
+    h1 { font-family: Georgia, serif; font-size: clamp(3rem, 7vw, 5.8rem); line-height: 1; margin: 16px 0 22px; }
+    .lead { font-size: 1.2rem; max-width: 690px; color: rgba(255,255,255,.84); }
+    .actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; }
+    .button {
+      display: inline-block;
+      padding: 12px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+      background: var(--gold);
+      color: #152238;
+    }
+    .button.secondary { background: transparent; color: white; border: 1px solid rgba(255,255,255,.5); }
+    .symbol-card {
+      padding: 34px;
+      border: 1px solid rgba(255,255,255,.2);
+      background: rgba(255,255,255,.08);
+      border-radius: 18px;
+      backdrop-filter: blur(8px);
+      text-align: center;
+    }
+    .psi { font-family: Georgia, serif; font-size: 5rem; margin: 0; }
+    .equation { font-family: Georgia, serif; font-size: 1.25rem; }
+    section { padding: 78px 0; }
+    .section-title { font-family: Georgia, serif; font-size: 2.3rem; margin: 0 0 14px; }
+    .section-intro { max-width: 750px; color: var(--muted); margin-bottom: 34px; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    .card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 28px;
+      box-shadow: 0 10px 30px rgba(20,34,54,.05);
+    }
+    .card h3 { margin-top: 0; }
+    .card p { color: var(--muted); }
+    .text-link { color: var(--blue); font-weight: 700; text-decoration: none; }
+    .week { background: white; }
+    .week-box {
+      border-left: 5px solid var(--gold);
+      background: #fffaf0;
+      padding: 28px 30px;
+      border-radius: 0 12px 12px 0;
+    }
+    .topics { columns: 2; padding-left: 20px; }
+    footer { background: var(--navy); color: rgba(255,255,255,.76); padding: 34px 0; }
+    footer .container { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+    @media (max-width: 800px) {
+      .hero, .grid { grid-template-columns: 1fr; }
+      .symbol-card { display: none; }
+      .nav-inner { align-items: flex-start; padding: 16px 0; flex-direction: column; }
+      .topics { columns: 1; }
+      header { padding: 72px 0; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="container nav-inner">
+      <div class="brand">QUANTUM MECHANICS</div>
+      <div class="nav-links">
+        <a href="#overview">Overview</a>
+        <a href="#lectures">Lectures</a>
+        <a href="#problems">Problem Sets</a>
+        <a href="#resources">Resources</a>
+      </div>
+    </div>
+  </nav>
+
+  <header>
+    <div class="container hero">
+      <div>
+        <div class="eyebrow">Course Website Template</div>
+        <h1>Quantum<br>Mechanics</h1>
+        <p class="lead">A simple home for lecture notes, problem sets, announcements and supplementary material. Replace the placeholder links below with files hosted in Google Drive.</p>
+        <div class="actions">
+          <a class="button" href="#lectures">View lectures</a>
+          <a class="button secondary" href="#problems">Problem sets</a>
+        </div>
+      </div>
+      <div class="symbol-card" aria-hidden="true">
+        <p class="psi">ψ</p>
+        <p class="equation">iℏ ∂ψ/∂t = Ĥψ</p>
+        <p>States · Operators · Measurement</p>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="overview">
+      <div class="container">
+        <h2 class="section-title">Course overview</h2>
+        <p class="section-intro">This course introduces the conceptual foundations and mathematical language of quantum theory, with emphasis on physical understanding and systematic problem solving.</p>
+        <div class="grid">
+          <article class="card"><h3>Instructor</h3><p>Prof. Jyotirmoy Bhattacharya<br>[Department / Institution]</p></article>
+          <article class="card"><h3>Class schedule</h3><p>[Days and times]<br>[Lecture room]</p></article>
+          <article class="card"><h3>Office hours</h3><p>[Day and time]<br>[Office / online link]</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="week">
+      <div class="container">
+        <h2 class="section-title">This week</h2>
+        <div class="week-box">
+          <h3>Week 1 — Foundations of quantum theory</h3>
+          <p>Wave-particle duality, the wavefunction, probability and the Schrödinger equation.</p>
+          <a class="text-link" href="#">Lecture notes →</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="lectures">
+      <div class="container">
+        <h2 class="section-title">Lecture modules</h2>
+        <p class="section-intro">Each module can link to a Google Drive folder, PDF lecture notes or slides.</p>
+        <div class="grid">
+          <article class="card"><h3>01. Foundations</h3><p>States, observables, measurement and uncertainty.</p><a class="text-link" href="#">Open material →</a></article>
+          <article class="card"><h3>02. One-dimensional systems</h3><p>Wells, barriers, tunnelling and scattering.</p><a class="text-link" href="#">Open material →</a></article>
+          <article class="card"><h3>03. Harmonic oscillator</h3><p>Wavefunctions, ladder operators and coherent states.</p><a class="text-link" href="#">Open material →</a></article>
+          <article class="card"><h3>04. Angular momentum</h3><p>Rotations, orbital angular momentum and spin.</p><a class="text-link" href="#">Open material →</a></article>
+          <article class="card"><h3>05. Approximation methods</h3><p>Perturbation theory, variational methods and WKB.</p><a class="text-link" href="#">Open material →</a></article>
+          <article class="card"><h3>06. Further topics</h3><p>Identical particles, entanglement and applications.</p><a class="text-link" href="#">Open material →</a></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="problems" class="week">
+      <div class="container">
+        <h2 class="section-title">Problem sets</h2>
+        <p class="section-intro">Replace these placeholders with public or institution-restricted Google Drive links.</p>
+        <div class="grid">
+          <article class="card"><h3>Problem Set 1</h3><p>Mathematical foundations and wavefunctions.</p><a class="text-link" href="#">Download PDF →</a></article>
+          <article class="card"><h3>Problem Set 2</h3><p>Operators, expectation values and uncertainty.</p><a class="text-link" href="#">Download PDF →</a></article>
+          <article class="card"><h3>Problem Set 3</h3><p>One-dimensional potentials and tunnelling.</p><a class="text-link" href="#">Download PDF →</a></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="resources">
+      <div class="container">
+        <h2 class="section-title">Course topics</h2>
+        <ul class="topics">
+          <li>Postulates of quantum mechanics</li>
+          <li>Dirac notation and Hilbert spaces</li>
+          <li>Schrödinger equation</li>
+          <li>Bound and scattering states</li>
+          <li>Harmonic oscillator</li>
+          <li>Angular momentum and spin</li>
+          <li>Perturbation theory</li>
+          <li>Identical particles</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <span>Quantum Mechanics · Course Website</span>
+      <span>Prof. Jyotirmoy Bhattacharya</span>
+    </div>
+  </footer>
+</body>
+</html>
