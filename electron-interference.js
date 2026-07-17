@@ -21,7 +21,7 @@
 
   const caption = figure.querySelector('figcaption');
   const waveCaption = 'Free-particle wavepacket: |ψ(x,t)|² spreads as time evolves';
-  const electronCaption = 'Single-electron impacts build up a double-slit interference pattern';
+  const electronCaption = 'Single-electron impacts gradually reveal a double-slit interference pattern';
 
   const ctx = electronCanvas.getContext('2d');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -31,10 +31,10 @@
   let showingElectrons = false;
 
   const waveDuration = 7;
-  const buildDuration = 30;
-  const holdDuration = 12;
+  const buildDuration = 150;
+  const holdDuration = 30;
   const cycleDuration = waveDuration + buildDuration + holdDuration;
-  const maxImpacts = 3200;
+  const maxImpacts = 14000;
 
   function resize(canvas, context) {
     const dpr = Math.max(1, window.devicePixelRatio || 1);
@@ -57,56 +57,92 @@
   }
 
   function sampleImpact(width, height) {
-    const screenLeft = width * 0.08;
-    const screenRight = width * 0.92;
+    const screenLeft = width * 0.07;
+    const screenRight = width * 0.93;
     let x;
-    for (let tries = 0; tries < 160; tries++) {
+    for (let tries = 0; tries < 220; tries++) {
       const candidate = screenLeft + Math.random() * (screenRight - screenLeft);
       const q = (candidate - width / 2) / width;
-      const envelope = Math.exp(-16 * q * q);
-      const fringes = 0.015 + 0.985 * Math.pow(Math.cos(11.5 * Math.PI * q), 2);
+      const envelope = Math.exp(-14 * q * q);
+      const fringes = 0.002 + 0.998 * Math.pow(Math.cos(12.8 * Math.PI * q), 8);
       if (Math.random() < envelope * fringes) {
         x = candidate;
         break;
       }
     }
-    if (x === undefined) x = width / 2 + randomGaussian() * width * 0.15;
-    const y = height * 0.11 + Math.random() * height * 0.78;
-    return { x, y, a: 0.62 + Math.random() * 0.38, r: 0.8 + Math.random() * 1.0 };
+    if (x === undefined) x = width / 2 + randomGaussian() * width * 0.14;
+    const y = height * 0.10 + Math.random() * height * 0.80;
+    return { x, y, a: 0.68 + Math.random() * 0.32, r: 0.72 + Math.random() * 0.72 };
+  }
+
+  function drawAccumulatedGlow(width, height, holdProgress) {
+    if (holdProgress <= 0) return;
+    const bins = 120;
+    const counts = new Array(bins).fill(0);
+    for (const p of impacts) {
+      const index = Math.max(0, Math.min(bins - 1, Math.floor((p.x / width) * bins)));
+      counts[index]++;
+    }
+    const maxCount = Math.max(1, ...counts);
+    ctx.save();
+    ctx.globalCompositeOperation = 'screen';
+    for (let i = 0; i < bins; i++) {
+      const normalized = counts[i] / maxCount;
+      if (normalized < 0.16) continue;
+      const x = (i / bins) * width;
+      const stripeWidth = width / bins + 1;
+      const alpha = holdProgress * 0.20 * Math.pow(normalized, 1.7);
+      const glow = ctx.createLinearGradient(0, height * 0.08, 0, height * 0.92);
+      glow.addColorStop(0, `rgba(120,220,255,0)`);
+      glow.addColorStop(0.18, `rgba(135,225,255,${alpha})`);
+      glow.addColorStop(0.82, `rgba(135,225,255,${alpha})`);
+      glow.addColorStop(1, `rgba(120,220,255,0)`);
+      ctx.fillStyle = glow;
+      ctx.fillRect(x, height * 0.06, stripeWidth, height * 0.88);
+    }
+    ctx.restore();
   }
 
   function drawScreen(now) {
     const { width, height } = resize(electronCanvas, ctx);
-    const gradient = ctx.createRadialGradient(width / 2, height / 2, 10, width / 2, height / 2, width * 0.65);
-    gradient.addColorStop(0, '#152d48');
-    gradient.addColorStop(1, '#07111d');
+    const gradient = ctx.createRadialGradient(width / 2, height / 2, 8, width / 2, height / 2, width * 0.68);
+    gradient.addColorStop(0, '#102841');
+    gradient.addColorStop(1, '#020810');
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, width, height);
 
-    ctx.strokeStyle = 'rgba(150,205,255,.22)';
+    ctx.strokeStyle = 'rgba(150,205,255,.18)';
     ctx.lineWidth = 1;
-    ctx.strokeRect(width * 0.055, height * 0.065, width * 0.89, height * 0.87);
+    ctx.strokeRect(width * 0.05, height * 0.055, width * 0.90, height * 0.89);
 
     const elapsed = (now - cycleStart) / 1000;
-    const building = reduceMotion || elapsed < waveDuration + buildDuration;
-    const interval = reduceMotion ? 0 : 24;
+    const buildEnd = waveDuration + buildDuration;
+    const building = reduceMotion || elapsed < buildEnd;
+    const interval = reduceMotion ? 0 : 38;
 
     if (reduceMotion && impacts.length < maxImpacts) {
       while (impacts.length < maxImpacts) impacts.push(sampleImpact(width, height));
     } else if (building && now - lastImpact > interval && impacts.length < maxImpacts) {
-      for (let i = 0; i < 3; i++) impacts.push(sampleImpact(width, height));
+      for (let i = 0; i < 4 && impacts.length < maxImpacts; i++) {
+        impacts.push(sampleImpact(width, height));
+      }
       lastImpact = now;
     }
 
     for (const p of impacts) {
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(150,228,255,${p.a})`;
-      ctx.shadowColor = 'rgba(120,220,255,.9)';
-      ctx.shadowBlur = 4.5;
+      ctx.fillStyle = `rgba(175,238,255,${p.a})`;
+      ctx.shadowColor = 'rgba(120,225,255,.95)';
+      ctx.shadowBlur = 3.8;
       ctx.fill();
     }
     ctx.shadowBlur = 0;
+
+    const holdProgress = reduceMotion
+      ? 1
+      : Math.max(0, Math.min(1, (elapsed - buildEnd) / 5));
+    drawAccumulatedGlow(width, height, holdProgress);
 
     if (!reduceMotion && showingElectrons) requestAnimationFrame(drawScreen);
   }
