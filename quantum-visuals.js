@@ -157,13 +157,87 @@
     ctx.stroke();
   }
 
-  function drawEquation(width, height) {
-    clear(width, height, '#10243d', '#07111d');
-    ctx.fillStyle = 'rgba(255,255,255,.96)';
+  function drawCatSilhouette(x, y, scale, flip = 1) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(flip * scale, scale);
+    ctx.fillStyle = 'rgba(0,0,0,.42)';
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 28, 18, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(24, -17, 13, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(15, -27); ctx.lineTo(19, -42); ctx.lineTo(27, -29); ctx.closePath();
+    ctx.moveTo(27, -29); ctx.lineTo(37, -42); ctx.lineTo(35, -24); ctx.closePath();
+    ctx.fill();
+    ctx.lineWidth = 7;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = 'rgba(0,0,0,.42)';
+    ctx.beginPath();
+    ctx.moveTo(-25, -3);
+    ctx.bezierCurveTo(-48, -26, -54, 4, -38, 15);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawEquation(width, height, elapsed) {
+    clear(width, height, '#172d4e', '#030711');
+
+    const pulse = reduceMotion ? 0.55 : 0.5 + 0.5 * Math.sin(elapsed * 0.55);
+    const halo = ctx.createRadialGradient(width / 2, height / 2, 6, width / 2, height / 2, Math.min(width, height) * .48);
+    halo.addColorStop(0, `rgba(83,170,255,${0.2 + 0.08 * pulse})`);
+    halo.addColorStop(.55, 'rgba(57,92,156,.12)');
+    halo.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = halo;
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.save();
+    ctx.globalAlpha = .28;
+    for (let i = 0; i < 28; i++) {
+      const x = (i * 97.3) % width;
+      const y = (i * 53.7) % height;
+      const r = 0.7 + (i % 3) * 0.45;
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fillStyle = i % 4 === 0 ? '#ffd978' : '#b8ddff';
+      ctx.fill();
+    }
+    ctx.restore();
+
+    const cardW = Math.min(width * .82, 520);
+    const cardH = Math.min(height * .42, 132);
+    const cardX = (width - cardW) / 2;
+    const cardY = (height - cardH) / 2;
+    ctx.save();
+    ctx.shadowColor = 'rgba(89,180,255,.4)';
+    ctx.shadowBlur = 28;
+    ctx.fillStyle = 'rgba(8,18,34,.72)';
+    ctx.strokeStyle = 'rgba(194,226,255,.34)';
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    ctx.roundRect(cardX, cardY, cardW, cardH, 22);
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+
+    drawCatSilhouette(width * .12, height * .86, Math.max(.7, width / 760), 1);
+    drawCatSilhouette(width * .88, height * .86, Math.max(.7, width / 760), -1);
+
+    ctx.save();
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.font = `${Math.max(28, Math.min(52, width * .075))}px Georgia, serif`;
+    ctx.font = `${Math.max(28, Math.min(50, width * .072))}px Georgia, serif`;
+    const textGradient = ctx.createLinearGradient(width * .3, 0, width * .7, 0);
+    textGradient.addColorStop(0, '#ffe09a');
+    textGradient.addColorStop(.5, '#ffffff');
+    textGradient.addColorStop(1, '#9ed8ff');
+    ctx.fillStyle = textGradient;
+    ctx.shadowColor = 'rgba(120,200,255,.45)';
+    ctx.shadowBlur = 14;
     ctx.fillText('iℏ ∂ψ/∂t = Ĥψ', width / 2, height / 2);
+    ctx.restore();
   }
 
   function resetScene(index) {
@@ -182,7 +256,7 @@
     if (scene === 0) drawDiffraction(now, width, height, localElapsed);
     else if (scene === 1) drawSpreading(width, height, localElapsed);
     else if (scene === 2) drawTunnelling(width, height, localElapsed);
-    else drawEquation(width, height);
+    else drawEquation(width, height, localElapsed);
     requestAnimationFrame(draw);
   }
 
