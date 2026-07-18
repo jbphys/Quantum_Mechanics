@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="PH31201 Advanced Quantum Mechanics course website">
-  <title>PH31201 · Advanced Quantum Mechanics</title>
+  <meta name="description" content="PH31201 Quantum Mechanics course website">
+  <title>PH31201 · Quantum Mechanics</title>
   <style>
     :root{--navy:#10243d;--blue:#2f6fba;--gold:#e0b34c;--paper:#f4f6f9;--ink:#172033;--muted:#5d6878;--line:#dde3eb;--white:#fff;--soft:#eef4fb}
     *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;font-family:Inter,Arial,sans-serif;color:var(--ink);background:var(--paper);line-height:1.65}
@@ -14,7 +14,7 @@
     header{color:#fff;background:radial-gradient(circle at 82% 20%,rgba(47,111,186,.58),transparent 31%),radial-gradient(circle at 14% 82%,rgba(224,179,76,.22),transparent 25%),linear-gradient(135deg,#0b192c,#183b63);padding:86px 0 74px;overflow:hidden}
     .hero{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:center}.eyebrow{color:#ffdc83;font-weight:800;text-transform:uppercase;letter-spacing:.15em;font-size:.82rem}h1{font-family:Georgia,serif;font-size:clamp(3rem,7vw,5.5rem);line-height:1;margin:15px 0 20px}.lead{font-size:1.18rem;max-width:680px;color:rgba(255,255,255,.86)}
     .actions{display:flex;flex-wrap:wrap;gap:13px;margin-top:30px}.button{display:inline-flex;align-items:center;justify-content:center;padding:12px 19px;border-radius:9px;text-decoration:none;font-weight:800;background:var(--gold);color:#152238;border:0;cursor:pointer}.button.secondary{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.5)}
-    .visual-card{padding:16px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);border-radius:18px;backdrop-filter:blur(8px)}.visual-card canvas{width:100%;height:270px;display:block;border-radius:12px;background:#050b13}.visual-controls{display:flex;justify-content:flex-end;margin-top:12px}.visual-controls button{font:inherit}
+    .visual-card{padding:16px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);border-radius:18px;backdrop-filter:blur(8px)}.visual-card canvas{width:100%;height:270px;display:block;border-radius:12px;background:#050b13}.visual-controls{display:flex;justify-content:flex-end;margin-top:10px}.visual-next{width:38px;height:38px;padding:0;border-radius:50%;font-size:1.45rem;line-height:1;background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.55);cursor:pointer;transition:transform .18s ease,background .18s ease}.visual-next:hover,.visual-next:focus-visible{background:rgba(255,255,255,.18);transform:translateX(2px);outline:2px solid rgba(255,220,131,.85);outline-offset:2px}
     section{padding:76px 0}.section-title{font-family:Georgia,serif;font-size:2.35rem;margin:0 0 14px}.section-intro{max-width:800px;color:var(--muted);margin:0 0 32px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}.card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:27px;box-shadow:0 12px 32px rgba(20,34,54,.055)}.card h3{margin-top:0}.card p{color:var(--muted)}
     .info-grid{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:22px}.info-card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:26px;box-shadow:0 12px 32px rgba(20,34,54,.055)}.info-card h3{margin:0 0 14px}.info-card p{margin:.45rem 0}.contact-list{display:grid;gap:12px}.contact-list strong{display:block;color:var(--ink)}.contact-list a{color:var(--blue);text-decoration:none;overflow-wrap:anywhere}
     .week{background:#fff}.week-box{border-left:5px solid var(--gold);background:#fffaf0;padding:27px 30px;border-radius:0 12px 12px 0}.week-box h3{margin-top:0}.module-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}.text-link{color:var(--blue);font-weight:800;text-decoration:none}.muted-label{display:inline-block;margin-left:8px;color:var(--muted);font-size:.9rem;font-weight:600}
@@ -22,7 +22,7 @@
     .references{display:grid;gap:15px;padding:0;margin:0;list-style:none}.references li{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 20px}.references a{color:var(--blue);text-decoration:none;font-weight:700}
     footer{background:var(--navy);color:rgba(255,255,255,.78);padding:34px 0}footer .container{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
     @media(max-width:900px){.hero,.info-grid{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}.visual-card canvas{height:250px}}
-    @media(max-width:680px){.nav-inner{align-items:flex-start;padding:15px 0;flex-direction:column}.nav-links{gap:13px}.hero,.grid,.module-grid{grid-template-columns:1fr}header{padding:62px 0}.visual-card{padding:11px}.visual-card canvas{height:220px}.visual-controls{justify-content:stretch}.visual-controls .button{width:100%}.section-title{font-size:2rem}.announcement-box{align-items:flex-start}.container{width:min(94%,1120px)}}
+    @media(max-width:680px){.nav-inner{align-items:flex-start;padding:15px 0;flex-direction:column}.nav-links{gap:13px}.hero,.grid,.module-grid{grid-template-columns:1fr}header{padding:62px 0}.visual-card{padding:11px}.visual-card canvas{height:220px}.visual-controls{justify-content:flex-end}.section-title{font-size:2rem}.announcement-box{align-items:flex-start}.container{width:min(94%,1120px)}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
   </style>
 </head>
@@ -33,13 +33,13 @@
     <div class="container hero">
       <div>
         <div class="eyebrow">PH31201</div>
-        <h1>Advanced<br>Quantum Mechanics</h1>
-        <p class="lead">An advanced undergraduate course in quantum mechanics for physics majors, with emphasis on mathematical structure, physical interpretation, and systematic problem solving.</p>
+        <h1>Quantum<br>Mechanics</h1>
+        <p class="lead">An undergraduate course in quantum mechanics for physics majors, with emphasis on mathematical structure, physical interpretation, and systematic problem solving.</p>
         <div class="actions"><a class="button" href="#lectures">Lecture notes</a><a class="button secondary" href="#problems">Problem sets</a></div>
       </div>
       <figure class="visual-card" aria-label="Animated quantum-mechanical demonstrations">
         <canvas id="quantum-visual" width="560" height="320"></canvas>
-        <div class="visual-controls"><button id="next-visual" class="button secondary" type="button" aria-label="Show next animation">Next visual</button></div>
+        <div class="visual-controls"><button id="next-visual" class="visual-next" type="button" aria-label="Show next animation" title="Next animation">›</button></div>
       </figure>
     </div>
   </header>
@@ -51,7 +51,7 @@
         <p class="section-intro">This course introduces the conceptual foundations and mathematical language of quantum theory, with emphasis on physical understanding and systematic problem solving. Students are expected to have prior exposure to undergraduate quantum physics and to be comfortable with the basic Schrödinger equation, wavefunctions, and elementary operator methods.</p>
         <div class="info-grid">
           <article class="info-card"><h3>Instructor & teaching assistants</h3><div class="contact-list"><div><strong>Jyotirmoy Bhattacharya</strong><a href="mailto:jyotirmoy.phys@gmail.com">jyotirmoy.phys@gmail.com</a></div><div><strong>Amiya Misra</strong><a href="mailto:mishramiya@gmail.com">mishramiya@gmail.com</a></div><div><strong>Ritwik Acharyya</strong><a href="mailto:ritwikacharyya995@gmail.com">ritwikacharyya995@gmail.com</a></div><div><strong>Md Sirajul Basir</strong><a href="mailto:bmdsirajul@gmail.com">bmdsirajul@gmail.com</a></div></div></article>
-          <article class="info-card"><h3>Class timings</h3><p><strong>Monday</strong><br>12:00–12:55</p><p><strong>Tuesday</strong><br>10:00–10:55<br>11:00–11:55</p><p><strong>Thursday</strong><br>08:00–08:55</p><p><strong>Classroom:</strong> NC233</p></article>
+          <article class="info-card"><h3>Class timings</h3><p><strong>Monday</strong><br>12:00–12:55</p><p><strong>Tuesday</strong><br>10:00–11:55</p><p><strong>Thursday</strong><br>08:00–08:55</p><p><strong>Classroom:</strong> NC233</p></article>
           <article class="info-card"><h3>Office hours</h3><p><strong>Wednesday</strong><br>16:00–19:00</p><p><strong>Location:</strong> C313A, second floor, Physics Department</p><p>Please arrange an appointment in advance by email.</p></article>
         </div>
       </div>
@@ -89,7 +89,7 @@
     </section>
   </main>
 
-  <footer><div class="container"><span>PH31201 · Advanced Quantum Mechanics</span><span>Jyotirmoy Bhattacharya</span></div></footer>
-  <script src="quantum-visuals.js?v=20260719-1"></script>
+  <footer><div class="container"><span>PH31201 · Quantum Mechanics</span><span>Jyotirmoy Bhattacharya</span></div></footer>
+  <script src="quantum-visuals.js?v=20260719-2"></script>
 </body>
 </html>
